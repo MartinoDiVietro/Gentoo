@@ -1,0 +1,22 @@
+mount /dev/sda1 /boot
+emerge-webrsync
+emerge --sync
+eselect profile list
+echo "Inserisci il numero"
+read s
+eselect profile set $s
+emerge --ask --verbose --update --deep --newuse @world
+emerge --ask app-portage/cpuid2cpuflags
+cpuid2cpuflags
+echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags
+echo "Europe/Rome" > /etc/timezone
+emerge --config sys-libs/timezone-data
+nano -w /etc/locale.gen
+locale-gen
+eselect locale list
+echo "Inserisci il numero"
+read n
+eselect locale set $n
+echo"Scrivi questo:
+env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
+"
