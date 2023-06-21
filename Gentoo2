@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir /etc/portage/package.license
+echo "sys-kernel/linux-firmware @BINARY-REDISTRIBUTABLE" >> /etc/portage/package.license
 emerge --ask sys-kernel/linux-firmware
 emerge --ask sys-kernel/installkernel-gentoo
 emerge --ask sys-kernel/gentoo-kernel
@@ -11,8 +13,6 @@ read input
 if [[$input == "no" ]]; then
 emerge --ask sys-kernel/gentoo-sources
 eselect kernel set 1
-mkdir /etc/portage/package.license
-echo "sys-kernel/linux-firmware @BINARY-REDISTRIBUTABLE" >> /etc/portage/package.license
 emerge --ask sys-kernel/genkernel
 genkernel --mountboot --install all
 fi
