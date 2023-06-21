@@ -22,9 +22,14 @@ mount --rbind /dev /mnt/gentoo/dev
 mount --make-rslave /mnt/gentoo/dev
 mount --bind /run /mnt/gentoo/run
 mount --make-slave /mnt/gentoo/run
+echo "Srivi questo ora:
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
 export PS1="(chroot) ${PS1}"
+"
+
+
+
 mount /dev/sda1 /boot
 emerge-webrsync
 emerge --sync
@@ -115,12 +120,12 @@ mkdir -p /boot/efi/boot
 cp /boot/vmlinuz-* /boot/efi/boot/bootx64.efi
 efibootmgr --create --disk /dev/sda --part 2 --label "Gentoo" --loader "\efi\boot\bootx64.efi"
 efibootmgr -c -d /dev/sda -p 2 -L "Gentoo" -l "\efi\boot\bootx64.efi" initrd='\initramfs-genkernel-amd64-5.15.52-gentoo'
+echo "Scrivi questo ora, poi reboot :-)
 exit
 cd
 umount -l /mnt/gentoo/dev{/shm,/pts,}
 umount -R /mnt/gentoo
-echo "se ce l'hai fatta ti stimo"
-
+"
 
 
 
