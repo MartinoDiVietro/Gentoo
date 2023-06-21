@@ -1,3 +1,5 @@
+#!/bin/bash
+
 emerge --ask sys-kernel/linux-firmware
 emerge --ask sys-kernel/installkernel-gentoo
 emerge --ask sys-kernel/gentoo-kernel
