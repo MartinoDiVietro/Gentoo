@@ -19,6 +19,80 @@ eselect locale list
 echo "Inserisci il numero"
 read n
 eselect locale set $n
-echo"Scrivi questo:
 env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
+mkdir /etc/portage/package.license
+echo "sys-kernel/linux-firmware @BINARY-REDISTRIBUTABLE" >> /etc/portage/package.license
+emerge --ask sys-kernel/linux-firmware
+emerge --ask sys-kernel/installkernel-gentoo
+emerge --ask sys-kernel/gentoo-kernel
+emerge --depclean
+emerge --ask @module-rebuild
+emerge --config sys-kernel/gentoo-kernel
+echo "Ha funzionato? se non ha funzionato scrivi no"
+read input
+if [[$input == "no" ]]; then
+emerge --ask sys-kernel/gentoo-sources
+eselect kernel set 1
+emerge --ask sys-kernel/genkernel
+genkernel --mountboot --install all
+fi
+echo "# Adjust any formatting difference and additional partitions created from the Preparing the disks step
+/dev/sda1   /boot        vfat    defaults,noatime     0 2
+/dev/sda2   none         swap    sw                   0 0
+/dev/sda3   /            ext4    noatime              0 1
+  
+/dev/cdrom  /mnt/cdrom   auto    noauto,user          0 0"
+echo "Quando sei pronto schiaccia un tasto"
+read a
+nano /etc/fstab
+echo martino > /etc/hostname
+emerge --ask net-misc/dhcpcd
+rc-update add dhcpcd default
+rc-service dhcpcd start
+emerge --ask net-misc/dhcpcd
+rc-update add dhcpcd default
+rc-service dhcpcd start
+emerge --ask --noreplace net-misc/netifrc
+echo config_enp0s3="dhcp" >> /etc/conf.d/net
+cd /etc/init.d
+ln -s net.lo net.enp0s3
+rc-update add net.enp0s3 default
+passwd
+nano /etc/rc.conf
+nano /etc/conf.d/keymaps
+nano /etc/conf.d/hwclock
+emerge --ask app-admin/sysklogd
+rc-update add sysklogd default
+emerge --ask sys-process/cronie
+rc-update add cronie default
+emerge --ask sys-apps/mlocate
+rc-update add sshd default
+nano -w /etc/inittab
+emerge --ask net-misc/chrony
+rc-update add chronyd default
+emerge --ask net-wireless/iw
+echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
+emerge --ask sys-boot/grub
+grub-install --target=x86_64-efi --efi-directory=/boot
+echo "Ha funzionato? se non ha funzionato scrivi no"
+read in
+if [[$in == "no" ]]; then
+mount -o remount,rw,nosuid,nodev,noexec --types efivarfs efivarfs /sys/firmware/efi/efivars
+fi
+echo "Ha funzionato? se non ha funzionato scrivi no"
+read inp
+if [[$inp == "no" ]]; then
+grub-install --target=x86_64-efi --efi-directory=/boot --removable
+fi
+grub-mkconfig -o /boot/grub/grub.cfg
+emerge --ask sys-boot/efibootmgr
+mkdir -p /boot/efi/boot/bootx64.efi
+cp /boot/vmlinuz-* /boot/efi/boot/bootx64.efi
+efibootmgr --create --disk /dev/sda --part 2 --label "Gentoo" --loader "\efi\boot\bootx64.efi"
+efibootmgr -c -d /dev/sda -p 2 -L "Gentoo" -l "\efi\boot\bootx64.efi" initrd='\initramfs-genkernel-amd64-5.15.52-gentoo'
+echo "Scrivi questo ora, poi reboot :-)
+exit
+cd
+umount -l /mnt/gentoo/dev{/shm,/pts,}
+umount -R /mnt/gentoo
 "
