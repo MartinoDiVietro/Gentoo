@@ -45,7 +45,7 @@ echo "# Adjust any formatting difference and additional partitions created from 
 echo "Quando sei pronto schiaccia un tasto"
 read a
 nano /etc/fstab
-echo martino > /etc/hostname
+echo Gentoo > /etc/hostname
 emerge --ask net-misc/dhcpcd
 rc-update add dhcpcd default
 rc-service dhcpcd start
