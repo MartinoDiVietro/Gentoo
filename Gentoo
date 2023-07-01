@@ -25,7 +25,7 @@ mount --make-slave /mnt/gentoo/run
 echo "Srivi questo ora:
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
-export PS1=(chroot) ${PS1}
+export PS1= virgolette (chroot) ${PS1} virgolette
 
 
 
