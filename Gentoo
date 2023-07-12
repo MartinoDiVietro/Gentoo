@@ -22,10 +22,10 @@ mount --rbind /dev /mnt/gentoo/dev
 mount --make-rslave /mnt/gentoo/dev
 mount --bind /run /mnt/gentoo/run
 mount --make-slave /mnt/gentoo/run
-echo "Srivi questo ora:
+echo 'Srivi questo ora:
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
-export PS1= virgolette (chroot) ${PS1} virgolette
+export PS1="(chroot) ${PS1}"'
 
 
 
