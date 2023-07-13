@@ -8,8 +8,9 @@ swapon /dev/sda2
 mount /dev/sda3 /mnt/gentoo
 chronyd -q
 cd /mnt/gentoo
-wget https://bouncer.gentoo.org/fetch/root/all/releases/amd64/autobuilds/20230618T170201Z/stage3-amd64-desktop-openrc-20230618T170201Z.tar.xz
-tar xpvf stage3-amd64-desktop-openrc-20230618T170201Z.tar.xz --xattrs-include='*.*' --numeric-owner
+wget https://bouncer.gentoo.org/fetch/root/all/releases/amd64/autobuilds/20230711T174853Z/stage3-amd64-desktop-openrc-20230711T174853Z.tar.xz
+tar xpvf 
+stage3-amd64-desktop-openrc-20230711T174853Z.tar.xz
 nano -w /mnt/gentoo/etc/portage/make.conf
 mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf
 mkdir --parents /mnt/gentoo/etc/portage/repos.conf
