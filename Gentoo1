@@ -85,11 +85,6 @@ if [[$inp == "no" ]]; then
 grub-install --target=x86_64-efi --efi-directory=/boot --removable
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
-emerge --ask sys-boot/efibootmgr
-mkdir -p /boot/efi/boot/bootx64.efi
-cp /boot/vmlinuz-* /boot/efi/boot/bootx64.efi
-efibootmgr --create --disk /dev/sda --part 2 --label "Gentoo" --loader "\efi\boot\bootx64.efi"
-efibootmgr -c -d /dev/sda -p 2 -L "Gentoo" -l "\efi\boot\bootx64.efi" initrd='\initramfs-genkernel-amd64-5.15.52-gentoo'
 echo "Scrivi questo ora, poi reboot :-)
 exit
 cd
