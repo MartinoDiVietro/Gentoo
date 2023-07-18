@@ -20,6 +20,7 @@ echo "Inserisci il numero"
 read n
 eselect locale set $n
 env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
+mkdir /etc/portage/package.license
 touch /etc/portage/package.license/linux-firmware
 echo sys-kernel/linux-firmware linux-fw-redistributable >> /etc/portage/package.license/linux-firmware 
 emerge --ask sys-kernel/linux-firmware
