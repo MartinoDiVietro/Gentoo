@@ -47,13 +47,10 @@ echo "Quando sei pronto schiaccia un tasto"
 read a
 nano /etc/fstab
 echo Gentoo > /etc/hostname
-emerge --ask net-misc/dhcpcd
+emerge net-misc/dhcpcd
 rc-update add dhcpcd default
 rc-service dhcpcd start
-emerge --ask net-misc/dhcpcd
-rc-update add dhcpcd default
-rc-service dhcpcd start
-emerge --ask --noreplace net-misc/netifrc
+emerge --noreplace net-misc/netifrc
 echo config_enp0s3="dhcp" >> /etc/conf.d/net
 cd /etc/init.d
 ln -s net.lo net.enp0s3
@@ -62,18 +59,17 @@ passwd
 nano /etc/rc.conf
 nano /etc/conf.d/keymaps
 nano /etc/conf.d/hwclock
-emerge --ask app-admin/sysklogd
+emerge app-admin/sysklogd
 rc-update add sysklogd default
-emerge --ask sys-process/cronie
+emerge sys-process/cronie
 rc-update add cronie default
-emerge --ask sys-apps/mlocate
+emerge sys-apps/mlocate
 rc-update add sshd default
 nano -w /etc/inittab
-emerge --ask net-misc/chrony
+emerge net-misc/chrony
 rc-update add chronyd default
-emerge --ask net-wireless/iw
 echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
-emerge --ask sys-boot/grub
+emerge sys-boot/grub
 grub-install --target=x86_64-efi --efi-directory=/boot
 echo "Ha funzionato? se non ha funzionato scrivi no"
 read in
