@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 cfdisk /dev/sda
