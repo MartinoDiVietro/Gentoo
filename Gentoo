@@ -7,7 +7,9 @@ mkswap /dev/sda2
 swapon /dev/sda2
 mount /dev/sda3 /mnt/gentoo
 cd /mnt/gentoo
-echo "Select which Stage3 you want:
+echo "
+
+Select which Stage3 you want:
 Desktop/OpenRC (1)
 Desktop/Systemd (2)
 Openrc (3)
@@ -34,7 +36,7 @@ fi
 
 if [[ $stage == "4" ]]; then
 wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20230723T170155Z/stage3-amd64-systemd-20230723T170155Z.tar.xz
-tar stage3-amd64-systemd-20230723T170155Z.tar.xz
+tar xpvf stage3-amd64-systemd-20230723T170155Z.tar.xz
 fi
 
 nano -w /mnt/gentoo/etc/portage/make.conf
