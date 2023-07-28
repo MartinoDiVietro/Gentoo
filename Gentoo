@@ -56,9 +56,6 @@ export PS1="(chroot) ${PS1}"
 wget https://raw.githubusercontent.com/MartinoDiVietro/Gentoo/main/Gentoo1
 chmod +x Gentoo1
 ./Gentoo1
-
-( !! Warning: If you chosed Systemd as init-system, you must wget:
-wget https://raw.githubusercontent.com/MartinoDiVietro/Gentoo/main/Gentoo1-systemd)
 '
 
 
