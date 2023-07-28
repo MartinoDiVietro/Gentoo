@@ -4,87 +4,105 @@ mount /dev/sda1 /boot
 emerge-webrsync
 emerge --sync
 eselect profile list
-echo "Inserisci il numero"
+echo "Insert the profile number"
 read s
 eselect profile set $s
-emerge --ask --verbose --update --deep --newuse @world
-emerge --ask app-portage/cpuid2cpuflags
-cpuid2cpuflags
+emerge --verbose --update --deep --newuse @world
+emerge app-portage/cpuid2cpuflags
 echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags
-echo "Europe/Rome" > /etc/timezone
+echo "Insert your timezone (example: Europe/Rome)"
+read timezonein
+echo $timezonein > /etc/timezone
 emerge --config sys-libs/timezone-data
 nano -w /etc/locale.gen
 locale-gen
 eselect locale list
-echo "Inserisci il numero"
+echo "Insert the locale number"
 read n
 eselect locale set $n
 env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
 mkdir /etc/portage/package.license
 touch /etc/portage/package.license/linux-firmware
 echo sys-kernel/linux-firmware linux-fw-redistributable >> /etc/portage/package.license/linux-firmware 
-emerge --ask sys-kernel/linux-firmware
-emerge --ask sys-kernel/installkernel-gentoo
-emerge --ask sys-kernel/gentoo-kernel
+emerge sys-kernel/linux-firmware
+emerge sys-kernel/installkernel-gentoo
+emerge sys-kernel/gentoo-kernel-bin
 emerge --depclean
-emerge --ask @module-rebuild
-emerge --config sys-kernel/gentoo-kernel
-echo "Ha funzionato? se non ha funzionato scrivi no"
+emerge @module-rebuild
+emerge --config sys-kernel/gentoo-kernel-bin
+echo "Did it work? If it did not work, type no"
 read input
-if [[$input == "no" ]]; then
+if [[ $input == "no" ]]; then
 emerge --ask sys-kernel/gentoo-sources
 eselect kernel set 1
 emerge --ask sys-kernel/genkernel
 genkernel --mountboot --install all
 fi
-echo "# Adjust any formatting difference and additional partitions created from the Preparing the disks step
+echo "
 /dev/sda1   /boot        vfat    defaults,noatime     0 2
 /dev/sda2   none         swap    sw                   0 0
 /dev/sda3   /            ext4    noatime              0 1
-  
-/dev/cdrom  /mnt/cdrom   auto    noauto,user          0 0"
-echo "Quando sei pronto schiaccia un tasto"
-read a
-nano /etc/fstab
+/dev/cdrom  /mnt/cdrom   auto    noauto,user          0 0" >> /etc/fstab
 echo Gentoo > /etc/hostname
 emerge net-misc/dhcpcd
+echo "Which init-system did you choose?
+OpenRC (1)
+System (2)
+
+(Default is OpenRC)
+"
+read init
+if [[ $init != "2" ]]; then
 rc-update add dhcpcd default
 rc-service dhcpcd start
 emerge --noreplace net-misc/netifrc
-echo config_enp0s3="dhcp" >> /etc/conf.d/net
-cd /etc/init.d
-ln -s net.lo net.enp0s3
-rc-update add net.enp0s3 default
+fi
+
+if [[ $init == "2" ]]; then
+systemctl enable --now dhcpcd
+fi
+
+echo "Insert root password"
 passwd
-nano /etc/rc.conf
 nano /etc/conf.d/keymaps
 nano /etc/conf.d/hwclock
 emerge app-admin/sysklogd
-rc-update add sysklogd default
 emerge sys-process/cronie
-rc-update add cronie default
 emerge sys-apps/mlocate
-rc-update add sshd default
-nano -w /etc/inittab
 emerge net-misc/chrony
+if [[ $init != "2" ]]; then
+rc-update add sysklogd default
+rc-update add cronie default
+rc-update add sshd default
 rc-update add chronyd default
+fi 
+
+if [[ $init == "2" ]]; then
+systemd-firstboot --prompt --setup-machine-id
+systemctl preset-all --preset-mode=enable-only
+systemctl enable sshd
+systemctl enable getty@tty1.service
+systemctl enable chronyd.service
+fi
+
 echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
 emerge sys-boot/grub
 grub-install --target=x86_64-efi --efi-directory=/boot
-echo "Ha funzionato? se non ha funzionato scrivi no"
+echo "Did it work? If it did not work, type no"
 read in
-if [[$in == "no" ]]; then
+if [[ $in == "no" ]]; then
 mount -o remount,rw,nosuid,nodev,noexec --types efivarfs efivarfs /sys/firmware/efi/efivars
 fi
-echo "Ha funzionato? se non ha funzionato scrivi no"
+echo "Did it work? If it did not work, type no"
 read inp
-if [[$inp == "no" ]]; then
+if [[ $inp == "no" ]]; then
 grub-install --target=x86_64-efi --efi-directory=/boot --removable
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
-echo "Scrivi questo ora, poi reboot :-)
+echo "Now type these three commands, the installation is finished :-)
 exit
 cd
 umount -l /mnt/gentoo/dev{/shm,/pts,}
-umount -R /mnt/gentoo
+umount -R /mnt/gentoo/boot
+reboot
 "
