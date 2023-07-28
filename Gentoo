@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 cfdisk /dev/sda
@@ -7,8 +8,36 @@ mkswap /dev/sda2
 swapon /dev/sda2
 mount /dev/sda3 /mnt/gentoo
 cd /mnt/gentoo
-wget https://bouncer.gentoo.org/fetch/root/all/releases/amd64/autobuilds/20230711T174853Z/stage3-amd64-desktop-openrc-20230711T174853Z.tar.xz
-tar xpvf stage3-amd64-desktop-openrc-20230711T174853Z.tar.xz
+echo "Select which Stage3 you want:
+Desktop/OpenRC (1)
+Desktop/Systemd (2)
+Openrc (3)
+Systemd (4)
+
+(Default is Desktop/RC)
+"
+read stage
+
+if [[ $stage != "2" && $stage != "3" && $stage != "4" ]]; then
+wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20230723T170155Z/stage3-amd64-desktop-openrc-20230723T170155Z.tar.xz
+tar xpvf stage3-amd64-desktop-openrc-20230723T170155Z.tar.xz
+fi
+
+if [[ $stage == "2" ]]; then
+wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20230723T170155Z/stage3-amd64-desktop-systemd-20230723T170155Z.tar.xz
+tar xpvf stage3-amd64-desktop-systemd-20230723T170155Z.tar.xz
+fi
+
+if [[ $stage == "3" ]]; then
+wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20230723T170155Z/stage3-amd64-openrc-20230723T170155Z.tar.xz
+tar xpvf stage3-amd64-openrc-20230723T170155Z.tar.xz
+fi
+
+if [[ $stage == "4" ]]; then
+wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20230723T170155Z/stage3-amd64-systemd-20230723T170155Z.tar.xz
+tar stage3-amd64-systemd-20230723T170155Z.tar.xz
+fi
+
 nano -w /mnt/gentoo/etc/portage/make.conf
 mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf
 mkdir --parents /mnt/gentoo/etc/portage/repos.conf
@@ -21,11 +50,17 @@ mount --rbind /dev /mnt/gentoo/dev
 mount --make-rslave /mnt/gentoo/dev
 mount --bind /run /mnt/gentoo/run
 mount --make-slave /mnt/gentoo/run
-echo 'Now, type these three commands:
+echo 'Now, type these commands:
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
-export PS1="(chroot) ${PS1}"'
+export PS1="(chroot) ${PS1}"
+wget https://raw.githubusercontent.com/MartinoDiVietro/Gentoo/main/Gentoo1
+chmod +x Gentoo1
+./Gentoo1
 
+( !! Warning: If you chosed Systemd as init-system, you must wget:
+wget https://raw.githubusercontent.com/MartinoDiVietro/Gentoo/main/Gentoo1-systemd)
+'
 
 
 
