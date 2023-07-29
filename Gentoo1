@@ -99,7 +99,7 @@ if [[ $inp == "no" ]]; then
 grub-install --target=x86_64-efi --efi-directory=/boot --removable
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
-echo "Now type these three commands, the installation is finished :-)
+echo "Now type these commands, the installation is finished :-)
 exit
 cd
 umount -l /mnt/gentoo/dev{/shm,/pts,}
