@@ -38,11 +38,7 @@ eselect kernel set 1
 emerge --ask sys-kernel/genkernel
 genkernel --mountboot --install all
 fi
-echo "
-/dev/sda1   /boot        vfat    defaults,noatime     0 2
-/dev/sda2   none         swap    sw                   0 0
-/dev/sda3   /            ext4    noatime              0 1
-/dev/cdrom  /mnt/cdrom   auto    noauto,user          0 0" >> /etc/fstab
+nano /etc/fstab
 echo Gentoo > /etc/hostname
 emerge net-misc/dhcpcd
 echo "Which init-system did you choose?
