@@ -52,6 +52,8 @@ if [[ $init != "2" ]]; then
 rc-update add dhcpcd default
 rc-service dhcpcd start
 emerge --noreplace net-misc/netifrc
+nano /etc/conf.d/keymaps
+nano /etc/conf.d/hwclock
 fi
 
 if [[ $init == "2" ]]; then
@@ -60,8 +62,6 @@ fi
 
 echo "Insert root password"
 passwd
-nano /etc/conf.d/keymaps
-nano /etc/conf.d/hwclock
 emerge app-admin/sysklogd
 emerge sys-process/cronie
 emerge sys-apps/mlocate
