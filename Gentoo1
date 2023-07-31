@@ -99,6 +99,6 @@ echo "Now type these commands, the installation is finished :-)
 exit
 cd
 umount -l /mnt/gentoo/dev{/shm,/pts,}
-umount -R /mnt/gentoo/boot
+umount -R /mnt/gentoo
 reboot
 "
