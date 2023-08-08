@@ -38,12 +38,6 @@ if [[ $stage == "4" ]]; then
 wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20230723T170155Z/stage3-amd64-systemd-20230723T170155Z.tar.xz
 tar xpvf stage3-amd64-systemd-20230723T170155Z.tar.xz
 fi
-
-if [[ $stage == "5" ]]; then
-wget https://distfiles.gentoo.org/releases/x86/autobuilds/20230807T194642Z/stage3-i686-openrc-20230807T194642Z.tar.xz
-tar xpvf stage3-i686-openrc-20230807T194642Z.tar.xz
-fi
-
 nano -w /mnt/gentoo/etc/portage/make.conf
 mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf
 mkdir --parents /mnt/gentoo/etc/portage/repos.conf
