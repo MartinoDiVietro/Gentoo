@@ -29,8 +29,8 @@ mkswap /dev/sda2
 swapon /dev/sda2
 mount /dev/sda3 /mnt/gentoo
 cd /mnt/gentoo
-wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20230917T164636Z/stage3-amd64-desktop-openrc-20230917T164636Z.tar.xz
-tar xpvf stage3-amd64-desktop-openrc-20230917T164636Z.tar.xz
+wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20231029T164701Z/stage3-amd64-desktop-openrc-20231029T164701Z.tar.xz
+tar xpvf stage3-amd64-desktop-openrc-20231029T164701Z.tar.xz
 nano -w /mnt/gentoo/etc/portage/make.conf
 mirrorselect -i -o >> /mnt/gentoo/etc/portage/make.conf
 mkdir --parents /mnt/gentoo/etc/portage/repos.conf
